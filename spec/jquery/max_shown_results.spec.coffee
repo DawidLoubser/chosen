@@ -70,12 +70,12 @@ describe "search", ->
           <option value='United States'>United States</option>
           <option value='United Kingdom'>United Kingdom</option>
           <option value='Afghanistan'>Afghanistan</option>
-          <option value='Afghanistan'>O.R. Tambo Intl. Airport</option>
+          <option value='JNB'>O.R. Tambo Intl. Airport</option>
         </select>
       "
     div = $("<div>").html(tmpl)
     select = div.find("select")
-    select.chosen({ ignore_special_chars : true })
+    select.chosen()
 
     container = div.find(".chosen-container")
     container.trigger("mousedown") # open the drop
@@ -105,7 +105,7 @@ describe "search", ->
       "
     div = $("<div>").html(tmpl)
     select = div.find("select")
-    select.chosen({ ignore_special_chars : true })
+    select.chosen()
 
     container = div.find(".chosen-container")
     container.trigger("mousedown") # open the drop
