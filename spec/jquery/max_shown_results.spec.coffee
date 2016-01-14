@@ -92,3 +92,33 @@ describe "search", ->
     results = div.find(".active-result")
     expect(results.size()).toBe(1)
     expect(results.first().text()).toBe "O.R. Tambo Intl. Airport"
+
+  it "match on title attribute (additional / alternate text)", ->
+    tmpl = "
+        <select data-placeholder='Choose a Country...'>
+          <option value=''></option>
+          <option value='United States'>United States</option>
+          <option value='United Kingdom'>United Kingdom</option>
+          <option value='Afghanistan'>Afghanistan</option>
+          <option value='Afghanistan' title='Johannesburg'>O.R. Tambo Intl. Airport</option>
+        </select>
+      "
+    div = $("<div>").html(tmpl)
+    select = div.find("select")
+    select.chosen({ ignore_special_chars : true })
+
+    container = div.find(".chosen-container")
+    container.trigger("mousedown") # open the drop
+    # Expect all results to be shown
+    results = div.find(".active-result")
+    expect(results.size()).toBe(4)
+
+    # Enter some text in the search field.
+    search_field = div.find(".chosen-search input").first()
+    search_field.val("johan")
+    search_field.trigger('keyup')
+
+    # Expect to only have one result: 'Afghanistan'.
+    results = div.find(".active-result")
+    expect(results.size()).toBe(1)
+    expect(results.first().text()).toBe "O.R. Tambo Intl. Airport"
