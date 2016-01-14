@@ -85,7 +85,7 @@ describe "search", ->
 
     # Enter some text in the search field.
     search_field = div.find(".chosen-search input").first()
-    search_field.val("or")
+    search_field.val("or tam")
     search_field.trigger('keyup')
 
     # Expect to only have one result: 'Afghanistan'.
