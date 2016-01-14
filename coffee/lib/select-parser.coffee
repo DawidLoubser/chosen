@@ -33,6 +33,7 @@ class SelectParser
           value: option.value
           text: option.text
           html: option.innerHTML
+          html_normalized: this.normalizeSearchText(option.innerHTML)
           title: option.title if option.title
           selected: option.selected
           disabled: if group_disabled is true then group_disabled else option.disabled
@@ -46,6 +47,13 @@ class SelectParser
           options_index: @options_index
           empty: true
       @options_index += 1
+
+  # Removes punctuation and other chars that users won't typically search for
+  normalizeSearchText: (text) ->
+    if not text? or text is false
+      return null
+    else
+      return text.replace(/[^A-Za-z0-9 ]/g, '')
 
   escapeExpression: (text) ->
     if not text? or text is false

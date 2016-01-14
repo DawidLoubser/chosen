@@ -175,13 +175,21 @@ class AbstractChosen
           results_group.active_options += 1
 
         option.search_text = if option.group then option.label else option.html
+        # TODO Separate displayed search text from actual searched text
 
         unless option.group and not @group_search
-          option.search_match = this.search_string_match(option.search_text, regex)
+          # Direct, visible match to displayed option text
+          if this.search_string_match(option.search_text, regex)
+            option.search_match = true
+            option.visible_match = true
+          # Indirect match to either an attribute (title), or normalised text
+          else if this.search_string_match(option.title, regex) || this.search_string_match(option.html_normalized, regex)
+            option.search_match = true
+            option.visible_match = false
           results += 1 if option.search_match and not option.group
 
           if option.search_match
-            if searchText.length
+            if option.visible_match && searchText.length
               startpos = option.search_text.search zregex
               text = option.search_text.substr(0, startpos + searchText.length) + '</em>' + option.search_text.substr(startpos + searchText.length)
               option.search_text = text.substr(0, startpos) + '<em>' + text.substr(startpos)
@@ -205,6 +213,7 @@ class AbstractChosen
     new RegExp(regex_anchor + escaped_search_string, 'i')
 
   search_string_match: (search_string, regex) ->
+    return false if ! search_string
     if regex.test search_string
       return true
     else if @enable_split_word_search and (search_string.indexOf(" ") >= 0 or search_string.indexOf("[") == 0)
@@ -301,4 +310,3 @@ class AbstractChosen
   @default_multiple_text: "Select Some Options"
   @default_single_text: "Select an Option"
   @default_no_result_text: "No results match"
-
